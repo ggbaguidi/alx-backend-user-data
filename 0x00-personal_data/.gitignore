@@ -2,3 +2,4 @@
 *main.py
 *.csv
 venv
+*main.sql
