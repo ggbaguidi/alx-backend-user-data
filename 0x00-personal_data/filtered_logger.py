@@ -2,6 +2,7 @@
 """Module documentation"""
 import re
 from typing import List
+import logging
 
 
 def filter_datum(
@@ -32,3 +33,22 @@ def filter_datum(
         message = re.sub(pattern, redaction, message)
 
     return message
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]) -> None:
+        self.fields = fields
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        """Log formatter"""
+        record.msg = filter_datum(
+            self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR)
+        return super().format(record=record)
