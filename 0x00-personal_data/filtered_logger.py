@@ -8,7 +8,7 @@ def filter_datum(
         fields: List[str],
         redaction: str,
         message: str,
-        separator: str):
+        separator: str) -> str:
     """
     Arguments:
         fields: a list of strings representing all fields to obfuscate
