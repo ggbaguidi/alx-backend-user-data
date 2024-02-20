@@ -34,7 +34,7 @@ class DB:
         Params:
             email: str
             hashed_password: str
-        Returns: 
+        Returns:
             User: an object User
         """
         user = User(email=email, hashed_password=hashed_password)
