@@ -72,9 +72,13 @@ class DB:
         Returns:
             None
         """
-        user = self.find_user_by(id=user_id)
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise ValueError
+
         for key, value in kwargs.items():
-            if key not in User.__dict__:
+            if not hasattr(user, key):
                 raise ValueError
             setattr(user, key, value)
         self.__session.commit()
