@@ -63,3 +63,19 @@ class DB:
                     return user
 
         raise NoResultFound
+
+    def update_user(self, user_id: int, **kwargs):
+        """
+        Params:
+            user_id integer
+            arbitrary keyword arguments
+        Returns:
+            None
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if key not in User.__dict__:
+                raise ValueError
+            setattr(user, key, value)
+        self.__session.commit()
+        return None
