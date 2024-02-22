@@ -80,3 +80,8 @@ class Auth:
             return None
 
         return user
+
+    def destroy_session(self, user_id: str) -> None:
+        """Destroy session
+        """
+        return self._db.update_user(user_id=user_id, session_id=None)
