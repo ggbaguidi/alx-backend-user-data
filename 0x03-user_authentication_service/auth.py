@@ -40,7 +40,7 @@ class Auth:
         except NoResultFound:
             user = self._db.add_user(
                 email=email,
-                hashed_password=_hash_password(password)
+                hashed_password=_hash_password(password).decode('utf-8')
             )
             return user
 
@@ -54,7 +54,7 @@ class Auth:
         except NoResultFound:
             return False
 
-        return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
+        return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password.encode('utf-8'))
 
     def create_session(self, email: str) -> str:
         """email string argument and returns the session ID as a string.
@@ -97,3 +97,18 @@ class Auth:
         self._db.update_user(user_id=user.id, reset_token=reset_token)
 
         return reset_token
+
+    def update_password(self, reset_token: str, password: str) -> None:
+        """Update password
+        """
+        try:
+            user = self._db.find_user_by(reset_token=reset_token)
+        except NoResultFound as e:
+            raise ValueError(
+                f"User with reset_token: {reset_token} doesn't exist"
+            ) from e
+        hashed_password = _hash_password(password=password).decode('utf-8')
+
+        self._db.update_user(user_id=user.id, hashed_password=hashed_password)
+
+        return None
