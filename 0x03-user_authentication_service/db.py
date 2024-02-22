@@ -74,8 +74,8 @@ class DB:
         """
         try:
             user = self.find_user_by(id=user_id)
-        except NoResultFound:
-            raise ValueError
+        except NoResultFound as e:
+            raise ValueError from e
 
         for key, value in kwargs.items():
             if not hasattr(user, key):
